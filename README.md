@@ -60,6 +60,8 @@ npm i toro-auto-router-plugin -D
 
 ## 配置
 
+**_注: 会将 [package-(module)/]pages/(page-name).[tsx|vue]_** 自动识别为页面
+
 ### 注册插件
 
 1、在根目录新建 generated 配置文件 .generatedrc.ts
@@ -98,7 +100,8 @@ export const taroRouter: Config = {
   appConfigPath: basePath + '/src/app.config.ts',
 
   // project.config.json 路径
-  projectConfigPath: basePath + '/project.config.json',
+  // 或者 project.private.config.json
+  projectConfigPath: basePath + '/project.private.config.json',
 
   // 输出文件名
   outputFileName: 'routerService',
