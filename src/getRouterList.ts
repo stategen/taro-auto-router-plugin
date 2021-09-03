@@ -1,71 +1,83 @@
-import { readdirSync, existsSync } from 'fs'
-import last from 'lodash.last'
-import { sep, resolve } from 'path'
-import { RouterMeta, RouterMetaOpt } from './types'
-import { formatter, upFirst } from './utils'
+import _ from 'lodash'
+import {RouterMeta, RquiredConfig} from './types'
+import {filterPath, getAllFiles, subStr, toCamelCase} from "./utils";
+import * as path from "path";
 
-// const routerList = [
-//   {
-//     name: 'Index',
-//     prefix: '',
-//     path: '/pages/index/index',
-//     type: 'main',
-//     package: ''
-//   },
-//   {
-//     name: 'Demo',
-//     prefix: '/package-demo',
-//     path: '/pages/demo/index',
-//     type: 'sub',
-//     package: 'package-demo'
-//   }
-// ]
 
-const initOpt: RouterMetaOpt = { prefix: 'pages', type: 'main', package: '' }
+export function getRouterList(config: RquiredConfig) {
+    const routerList: RouterMeta[] = [];
+    const {srcDir, projectPath, pagesDir, firstPage, subPageDirs, exts, pageNameRegs, pageNameIgnoreRegs} = config;
+    const srcPath = path.join(projectPath, srcDir);
 
-export function getRouterList(
-  path = '',
-  exts = ['tsx'],
-  routerList: RouterMeta[] = [],
-  opt = initOpt
-) {
-  const paths = readdirSync(path)
-  const { prefix } = opt
+    const srcPaths = getAllFiles(srcPath, exts)
+    //过滤只有page的页面 pageNameIgnoreRegs 优先
+    const pagePaths = srcPaths.filter(srcPath => filterPath(srcPath, pageNameRegs, pageNameIgnoreRegs));
 
-  for (const item of paths) {
-    const name = last(item.split(sep)) || ''
-
-    if (/^pages$/.test(name)) {
-      const pageDir = readdirSync(resolve(path, item))
-
-      for (const page of pageDir) {
-        const pagePath = `/${prefix ? prefix + '/' : ''}${page}/index`
-        const realFilePath = `${path}/pages/${page}/index`
-
-        getPathList(realFilePath, exts).forEach((p) => {
-          if (existsSync(p)) {
-            routerList.push({
-              name: upFirst(formatter(page)),
-              path: pagePath,
-              ...opt,
+    const subPaths: Record<string, string[]> = {};
+    //筛选主要页面
+    const mainPaths = pagePaths.filter((path) => {
+        const shortSrcPath = path.substr(srcPath.length + 1);
+        //判断是否subPackage
+        const isSub = subPageDirs.some(
+            (subPageDir => {
+                if (shortSrcPath.startsWith(subPageDir)) {
+                    !subPaths[subPageDir] && (subPaths[subPageDir] = []);
+                    subPaths[subPageDir].push(path)
+                    return true;
+                }
+                return false
             })
-          }
+        )
+
+        if (isSub) {
+            return false;
+        }
+        return shortSrcPath.startsWith(pagesDir);
+
+    })
+
+
+    //对subPackage进行加工
+    _.keys(subPaths).forEach((name) => {
+        let paths = subPaths[name];
+        const pages = paths.map((path) => {
+                const withoutSrcPath = subStr(path, srcPath.length + 1, '.');
+                return withoutSrcPath.substr(name.length + 1,);
+            }
+        )
+        const cameName = toCamelCase(name);
+        routerList.push({
+                name: cameName,
+                root: `${name}/`,
+                path: null as any,
+                type: 'sub',
+
+                pages,
+            }
+        )
+    })
+
+
+    //把首页排最前面
+    mainPaths.sort((path) => path.indexOf(firstPage) > -1 ? -1 : 1);
+
+    //对主要页面加工
+    mainPaths.forEach((path) => {
+        const withoutSrcPath = subStr(path, srcPath.length + 1, '.');
+        const page = withoutSrcPath.substr(pagesDir.length + 1);
+        const name = toCamelCase(page,);
+        routerList.push({
+            name,
+            path: withoutSrcPath,
+            type: 'main',
         })
-      }
-    }
 
-    if (/^package-/.test(name)) {
-      const opt: RouterMetaOpt = {
-        prefix: `${name}/pages`,
-        type: 'sub',
-        package: name,
-      }
-      routerList = getRouterList(resolve(path, item), exts, routerList, opt)
-    }
-  }
+    })
 
-  // index page is first
-  return routerList.sort((a) => (a.name === 'Index' ? -1 : 1))
+    return routerList;
+
 }
 
-const getPathList = (path: string, exts: string[]) => exts.map((v) => path + `.${v}`)
+
+
+

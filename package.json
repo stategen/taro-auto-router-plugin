@@ -24,9 +24,9 @@
       "pre-commit": "tsdx lint"
     }
   },
-  "homepage": "https://github.com/LuckyHH/generated-plugin-taro-router-service",
+  "homepage": "https://github.com/stategen/toro-auto-router-plugin",
   "bugs": {
-    "url": "https://github.com/LuckyHH/generated-plugin-taro-router-service/issues",
+    "url": "https://github.com/stategen/toro-auto-router-plugin/issues",
     "email": "gotoanything@foxmail.com"
   },
   "keywords": [
@@ -41,16 +41,16 @@
     "arrowParens": "always",
     "trailingComma": "es5"
   },
-  "name": "generated-plugin-taro-router-service",
+  "name": "toro-auto-router-plugin",
   "author": "Thomas Trainset",
-  "module": "dist/generated-plugin-taro-router-service.esm.js",
+  "module": "dist/toro-auto-router-plugin.esm.js",
   "size-limit": [
     {
-      "path": "dist/generated-plugin-taro-router-service.cjs.production.min.js",
+      "path": "dist/toro-auto-router-plugin.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/generated-plugin-taro-router-service.esm.js",
+      "path": "dist/toro-auto-router-plugin.esm.js",
       "limit": "10 KB"
     }
   ],
@@ -60,7 +60,8 @@
   "dependencies": {
     "generated": "^1.4.0",
     "lodash.last": "^3.0.0",
-    "ts-morph": "^9.1.0"
+    "ts-morph": "^9.1.0",
+    "chalk": "^4.1.2"
   },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.9.1",

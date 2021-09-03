@@ -44,14 +44,34 @@
     "miniprogram": {
       "list": [
         {
-          "id": 0,
+          "id": 1,
           "name": "Index",
           "pathName": "pages/index/index"
         },
         {
-          "id": 0,
+          "id": 2,
           "name": "Test",
           "pathName": "package-test/pages/test/index"
+        },
+        {
+          "id": 1,
+          "name": "packageTest",
+          "pathName": "ackage-test/"
+        },
+        {
+          "id": 2,
+          "name": "pagesSubPackage",
+          "pathName": "ages/subPackage/"
+        },
+        {
+          "id": 3,
+          "name": "firstPageFirstPage",
+          "pathName": "ages/firstPage/FirstPage"
+        },
+        {
+          "id": 4,
+          "name": "indexIndex",
+          "pathName": "ages/index/index"
         }
       ]
     }

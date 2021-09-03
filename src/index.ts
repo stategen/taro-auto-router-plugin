@@ -1,46 +1,40 @@
-import { join, resolve, isAbsolute } from 'path'
-import { PluginOptions } from 'generated'
-import { Config } from './types'
-import { getRouterList } from './getRouterList'
-import { generateRouterService } from './generateRouterService'
-import { modifyAppConfig } from './modifyAppConfig'
-import { modifyProjectConfig } from './modifyProjectConfig'
+import {PluginOptions} from 'generated'
+import {Config, defaultConfig} from './types'
+import _ from 'lodash'
+import {generateRouterService} from "./generateRouterService";
+import {getRouterList} from './getRouterList'
+// import {modifyProjectConfig} from "./modifyProjectConfig";
+// import {generateRouterService} from './generateRouterService'
+// // import { modifyAppConfig } from './modifyAppConfig'
+// import {modifyProjectConfig} from './modifyProjectConfig'
 
-const cwd = process.cwd()
 
 export default (options = {} as PluginOptions) => {
-  const routerConfig: Config = options.config.taroRouter || {}
+    const routerConfig: Config = options.config.taroRouter || {}
 
-  const { generatedDir = join(cwd, 'src', 'generated') } = options
-  const {
-    pageDir,
-    navigateSpecifier = '',
-    appConfigPath,
-    projectConfigPath,
-    navigateFnName,
-    outputFileName,
-    formatter,
-    exts,
-  } = resolveConfig(routerConfig)
+    const requiredConfig = resolveConfig(routerConfig);
 
-  const routerList = getRouterList(pageDir, exts)
-  generateRouterService(routerList, {
-    generatedDir,
-    navigateSpecifier,
-    navigateFnName,
-    outputFileName,
-    formatter,
-  })
-  modifyAppConfig(routerList, { appConfigPath })
-  modifyProjectConfig(routerList, { projectConfigPath })
+    const routerList = getRouterList(requiredConfig);
+
+    generateRouterService(routerList, requiredConfig);
+    //以下2个修改不要
+    // modifyAppConfig(routerList, requiredConfig)
+    // modifyProjectConfig(routerList, requiredConfig)
 }
 
-function resolveConfig(routerConfig: Config) {
-  const { pageDir, appConfigPath, projectConfigPath } = routerConfig
-  return [pageDir, appConfigPath, projectConfigPath].reduce((res, cur) => {
-    res[cur] = isAbsolute(cur) ? cur : resolve(cwd, cur)
-    return res
-  }, routerConfig as any)
+
+function resolveConfig(routerConfig: { [index: string]: any }): Required<Config> {
+    //合并默认设置
+    routerConfig = {...defaultConfig, ...routerConfig}
+    _.keys(routerConfig).forEach((key: string) => {
+        let value = (routerConfig)[key] || '';
+        if (value instanceof String) {
+            value = value.replace('\\', '/')
+            routerConfig[key] = value;
+        }
+    })
+    return routerConfig as any;
+
 }
 
 export * from './types'

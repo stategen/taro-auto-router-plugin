@@ -5,7 +5,7 @@ const generatedrc: GeneratedrcConfig = {
   configDir: './gconfig',
   generatedDir: path.resolve(__dirname, 'src', 'service'),
   plugins: [
-    'generated-plugin-taro-router-service'
+    'toro-auto-router-plugin'
   ],
 }
 

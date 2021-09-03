@@ -1,5 +1,4 @@
 export default {
-  pages: ["pages/index/index"],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
@@ -8,9 +7,10 @@ export default {
   },
   subPackages: [{
     "root": "package-test",
-    "name": "test",
+    "name": "Test",
     "pages": [
       "pages/test/index"
     ]
-  }]
+  }],
+  pages: ["pages/index/index"]
 }

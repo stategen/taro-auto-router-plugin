@@ -1,4 +1,4 @@
-# generated-plugin-taro-router-service
+# toro-auto-router-plugin
 
 让你的 Taro 路由跳转拥有类似 umi 框架约定式路由的体验。
 
@@ -45,7 +45,7 @@ navigateTo({ url: `${URLs.Test}?id=1` })
 ## 安装
 
 ```bash
-npm i generated-plugin-taro-router-service -D
+npm i toro-auto-router-plugin -D
 ```
 
 ## 使用
@@ -72,7 +72,7 @@ import { GeneratedrcConfig } from 'generated'
 const generatedrc: GeneratedrcConfig = {
   configDir: './gconfig', // generated 插件配置目录
   plugins: [
-    'generated-plugin-taro-router-service', // 注册插件
+    'toro-auto-router-plugin', // 注册插件
   ],
 }
 
@@ -86,7 +86,7 @@ export default generatedrc
 2、写入配置
 
 ```ts
-import { Config } from 'generated-plugin-taro-router-service'
+import { Config } from 'toro-auto-router-plugin'
 
 const basePath = process.cwd()
 
