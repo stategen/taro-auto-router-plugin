@@ -1,3 +1,5 @@
+原源代码为 https://github.com/xdoer/generated-plugin-taro-router-service
+我做了些生成优化修改，常量化和系统依赖倒置设计原则，因为生成代码不同，无法与原来的加绒，以所以重新起个名称
 # toro-auto-router-plugin
 
 让你的 Taro 路由跳转拥有类似 umi 框架约定式路由的体验。

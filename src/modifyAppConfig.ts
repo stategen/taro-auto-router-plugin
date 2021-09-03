@@ -3,10 +3,9 @@
 // import { saveSourceFile } from './saveSourceFile'
 // import { formatter } from './utils'
 
-export async function modifyAppConfig(
-//   routerList: RouterMeta[],
-//   modifyAppConfigOpt: ModifyAppConfigOpt
- ) {
+export async function modifyAppConfig() {
+  //   routerList: RouterMeta[],
+  //   modifyAppConfigOpt: ModifyAppConfigOpt
   // const { appConfigPath } = modifyAppConfigOpt
   //
   // /**

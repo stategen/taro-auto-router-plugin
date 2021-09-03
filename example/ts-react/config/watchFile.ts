@@ -17,7 +17,7 @@ module.exports = {
   chokidarConfigList: [
     {
       // 监听页面文件创建
-      file: basePath + '/**/pages/**/index.tsx',
+      file: basePath + '/**/src/**',
       opt,
       actions: {
         on: {
@@ -32,7 +32,7 @@ module.exports = {
     },
     {
       // 监听页面文件夹删除
-      file: basePath + '/**/pages/**',
+      file: basePath + '/**/src/**',
       opt,
       actions: {
         on: {
