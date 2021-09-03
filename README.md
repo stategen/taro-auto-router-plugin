@@ -213,6 +213,6 @@ export function customNavigateTo(pagePath: string, data?: any, opt?: any) {
 新建文件后，手动运行 `generated` 命令还是不够方便，因而，我设计了一个集成 [chokidar](https://github.com/paulmillr/chokidar) 的 webpack 插件[webpack-plugin-chokidar](https://github.com/LuckyHH/webpack-plugin-chokidar)，通过该插件，可以很容易的对文件更改进行监听，然后利用 shelljs 执行脚本即可。
 
 ## 案例
-
+> - 本来不会vue，所以vue部分没有改动，应该是跑不起来，请react修改
 > - [React + Typescript](./example/ts-react/config/index.js)
 > - [Vue3 + Typescript](./example/ts-vue/config/index.js)
