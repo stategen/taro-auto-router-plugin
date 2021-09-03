@@ -45,7 +45,7 @@ export const defaultConfig: Partial<Config> = {
     srcDir: 'src',
     firstPage: '/index/',
     pagesDir: 'pages',
-    exts: ['.tsx', '.jsx'],
+    exts: ['.tsx', '.jsx', '.vue'],
     pageNameRegs: [/^index/i, /page/i],
     pageNameIgnoreRegs: [/_x$/i],
 }

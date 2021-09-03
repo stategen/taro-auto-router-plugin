@@ -1,3 +1,7 @@
+import {RouterService} from "./service/routerService";
+import Taro from  '@tarojs/taro';
+
+
 export default {
   window: {
     backgroundTextStyle: 'light',
@@ -5,12 +9,9 @@ export default {
     navigationBarTitleText: 'WeChat',
     navigationBarTextStyle: 'black'
   },
-  subPackages: [{
-    "root": "package-test",
-    "name": "Test",
-    "pages": [
-      "pages/test/index"
-    ]
-  }],
-  pages: ["pages/index/index"]
-}
+  pages: [...RouterService.pages],
+  subPackages: [
+    ...RouterService.subPackages
+  ],
+
+} as Taro.Config

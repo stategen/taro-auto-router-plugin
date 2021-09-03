@@ -27,11 +27,72 @@ navigateTo({ url: `${URLs.Test}?id=1` })
 
 ## 作用
 
-> - 自动配置 `app.config.ts` 文件进行页面注册
-> - 自动配置 `project.config.json` 文件，添加开发者工具页面编译快捷入口
-> - 自动生成 `routerService` 文件，使得路由调用跳转更便捷。
+> - ~~自动配置 `app.config.ts` 文件进行页面注册~~
+> - ~~自动配置 `project.config.json` 文件，添加开发者工具页面编译快捷入口~~
+> - 自动生成 `routerService` 文件，使得路由调用跳转更便捷。和之前生成不同，这里采用依赖倒置原则，常理化,便于在代码更灵活调用
 > - 配合[webpack-plugin-chokidar](https://github.com/LuckyHH/webpack-plugin-chokidar)插件，新建页面文件后，将自动运行脚本，生成各项配置。
 
+```ts
+//RouterService.ts
+/**
+ *  该文件在开发阶段自动托管和生成，不要手动修改
+ *  do not edit it manually otherwise your code will be overrided
+ */
+import { navigateTo } from "@common/utils"
+
+export namespace RouterService {
+  export const pages_test_index = "package-test/pages/test/index"
+  export const nest_index = "pages/subPackage/nest/index"
+  export const test_index = "pages/subPackage/test/index"
+  export const index_index = "pages/index/index"
+  //_代表文件夹，原文件名中-_转换为驼峰， 
+  export const firstPage_FirstPage = "pages/firstPage/FirstPage"
+  export const pages = [
+    index_index,
+    firstPage_FirstPage,
+
+  ]
+    
+  export const subPackages = [{
+    "name": "packageTest",
+    "root": "package-test/",
+    "pages": [
+      "pages/test/index"
+    ]
+  }, {
+    "name": "pages_subPackage",
+    "root": "pages/subPackage/",
+    "pages": [
+      "nest/index",
+      "test/index"
+    ]
+  }]
+  export const toPages_test_index = <T>(data?: T, opt?: any) => navigateTo(pages_test_index, data as any, opt as any)
+  export const toNest_index = <T>(data?: T, opt?: any) => navigateTo(nest_index, data as any, opt as any)
+  export const toTest_index = <T>(data?: T, opt?: any) => navigateTo(test_index, data as any, opt as any)
+  export const toIndex_index = <T>(data?: T, opt?: any) => navigateTo(index_index, data as any, opt as any)
+  export const toFirstPage_FirstPage = <T>(data?: T, opt?: any) => navigateTo(firstPage_FirstPage, data as any, opt as any)
+}
+
+```
+不再修改app.config.ts
+```ts
+//app.config.ts
+import {RouterService} from "./service/routerService";
+import Taro from  '@tarojs/taro';
+
+
+export default {
+    //pages,subPackages采用依赖倒置,永远不变 
+    pages: [...RouterService.pages],
+    subPackages: [
+        ...RouterService.subPackages
+    ],
+    //... 
+} as Taro.Config
+
+
+```
 ## 环境
 
 `taro typescript`
@@ -42,7 +103,7 @@ navigateTo({ url: `${URLs.Test}?id=1` })
 
 ![效果图](./example.gif)
 
-## 安装
+## 安装 (没有注册到npm,暂时只安装到本地私人仓库)
 
 ```bash
 npm i toro-auto-router-plugin -D
@@ -88,35 +149,29 @@ export default generatedrc
 2、写入配置
 
 ```ts
-import { Config } from 'toro-auto-router-plugin'
+import { Config } from 'toro-auto-router-plugin/src/types'
 
 const basePath = process.cwd()
 
 export const taroRouter: Config = {
-  // 源码目录
-  pageDir: basePath + '/src',
+    //注释部分为默认值
+    // projectPath: process.cwd(),
+    // srcDir: 'src',
+    // firstPage: '/index/',
+    // pagesDir: 'pages',
+    // exts: ['.tsx', '.jsx', '.vue'],
+    // pageNameRegs: [/^index/i, /page/i],
+    // pageNameIgnoreRegs: [/_x$/i],
+    projectPath: basePath,
+    subPageDirs:['package-test','pages/subPackage'],
+    appConfigPath: basePath + '/src/app.config.ts',
+    projectConfigPath: basePath + '/project.config.json',
 
-  // app.config 路径
-  appConfigPath: basePath + '/src/app.config.ts',
-
-  // project.config.json 路径
-  // 或者 project.private.config.json
-  projectConfigPath: basePath + '/project.private.config.json',
-
-  // 输出文件名
-  outputFileName: 'routerService',
-
-  /**
-   * 导入组件
-   *
-   * 输出的文件将导入方法
-   * import { customNavigateTo } from '@/business/app'
-   */
-  navigateFnName: 'customNavigateTo', // 导入方法名
-  navigateSpecifier: '@/business/app', // 方法导入标识符
-
-  ext: ['tsx', 'vue'], // 文件扩展(默认tsx)
+    outputFileName: 'service/routerService',
+    navigateFnName: 'navigateTo',
+    navigateSpecifier: '@common/utils',
 }
+
 ```
 
 注意:
