@@ -70,30 +70,30 @@ export function subStr(src: string, fromIndex: number, lastStr: string) {
 }
 
 /***
- * 过滤文件夹，pageNameIgnoreRegs优先
+ * 过滤文件夹，pageIgnoreRegExps优先
  * @param srcPath
- * @param pageNameRegs
- * @param pageNameIgnoreRegs
+ * @param pageRegExps
+ * @param pageIgnoreRegExps
  */
 
 export function filterPath(
   srcPath: string,
-  pageNameRegs: RegExp[],
-  pageNameIgnoreRegs: RegExp[]
+  pageRegExps: RegExp[],
+  pageIgnoreRegExps: RegExp[]
 ): boolean {
-  const isRegsEmpty = _.isEmpty(pageNameRegs)
-  const isIgnoreRegsEmpty = _.isEmpty(pageNameIgnoreRegs)
+  const isRegsEmpty = _.isEmpty(pageRegExps)
+  const isIgnoreRegsEmpty = _.isEmpty(pageIgnoreRegExps)
   if (isRegsEmpty && isIgnoreRegsEmpty) {
     return true
   }
 
   const pageName = _.last(srcPath.split('/')) || ''
 
-  if (!isIgnoreRegsEmpty && pageNameIgnoreRegs.some((reg) => reg.test(pageName))) {
+  if (!isIgnoreRegsEmpty && pageIgnoreRegExps.some((reg) => reg.test(pageName))) {
     return false
   }
 
-  if (!isRegsEmpty && !pageNameRegs.some((reg) => reg.test(pageName))) {
+  if (!isRegsEmpty && !pageRegExps.some((reg) => reg.test(pageName))) {
     return false
   }
 

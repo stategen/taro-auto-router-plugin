@@ -1,6 +1,12 @@
 原源代码为 https://github.com/xdoer/generated-plugin-taro-router-service
-我做了些生成优化修改，采用常量化和依赖倒置设计原则，因为生成代码不同，无法与原来的兼容，以所以重新起个名称，
-暂时不在npm仓库中
+我做了些生成优化修改，
+1. 常量字符串只有一份的原则,生成到taroPages.js中，
+1. 不再修改app.config.ts,而用引用taroPages.js
+1. 不限定pageName为index，可以用正则过滤匹配
+1. 对pageName增加排除配置
+1. 增加首页配置功能   
+1. 对subPackage增加文件夹过滤，而不是只限到到package-*中,当pages中的文件要分包，不需要移动，直接配置在subPageDirs中
+1. 因为生成代码不同，无法与原来的兼容，以所以重新起个名称，
 # toro-auto-router-plugin
 
 让你的 Taro 路由跳转拥有类似 umi 框架约定式路由的体验。
@@ -30,60 +36,62 @@ navigateTo({ url: `${URLs.Test}?id=1` })
 
 ## 作用
 
-> - ~~自动配置 `app.config.ts` 文件进行页面注册~~
+> - ~~自动配置 `app.config.ts` 文件进行页面注册~~，不修改该文件，而用采用依赖倒置引用taroPages.js
 > - ~~自动配置 `project.config.json` 文件，添加开发者工具页面编译快捷入口~~
-> - 自动生成 `routerService` 文件，使得路由调用跳转更便捷。和之前生成不同，这里采用依赖倒置原则，常理化,便于在代码更灵活调用
+> - 自动生成 `taroPages.js` 文件,由于taro编译app.config.ts没有经过webpack编译，该js文件支持require引用
+> - 自动生成 `routerService.ts` 文件，使得路由调用跳转更便捷。和之前生成不同，这里采用依赖倒置原则，常理化,便于在代码更灵活调用
 > - 配合[webpack-plugin-chokidar](https://github.com/LuckyHH/webpack-plugin-chokidar)插件，新建页面文件后，将自动运行脚本，生成各项配置。
 
-```ts
-//RouterService.ts
-/**
- *  该文件在开发阶段自动托管和生成，不要手动修改
- *  do not edit it manually otherwise your code will be overrided
- */
-import { navigateTo } from "@common/utils"
-
-export namespace RouterService {
-  export const pages_test_index = "package-test/pages/test/index"
-  export const nest_index = "pages/subPackage/nest/index"
-  export const test_index = "pages/subPackage/test/index"
-  export const index_index = "pages/index/index"
-  //_代表文件夹，原文件名中-_转换为驼峰， 
-  export const firstPage_FirstPage = "pages/firstPage/FirstPage"
-  export const pages = [
+```js
+//taroPages.js 兼容app.config.ts中引用: const { pages, subPackages } = require('./service/taroPages')
+const pages_test_index = "package-test/pages/test/index"
+    ...
+const index_index = "pages/index/index"
+const firstPage_FirstPage = "pages/firstPage/FirstPage"
+const pages = [
     index_index,
     firstPage_FirstPage,
 
-  ]
-    
-  export const subPackages = [{
-    "name": "packageTest",
-    "root": "package-test/",
-    "pages": [
-      "pages/test/index"
-    ]
-  }, {
+]
+const subPackages = [
+    {
     "name": "pages_subPackage",
     "root": "pages/subPackage/",
     "pages": [
-      "nest/index",
-      "test/index"
+        "nest/index",
+        "test/index"
     ]
-  }]
-  export const toPages_test_index = <T>(data?: T, opt?: any) => navigateTo(pages_test_index, data as any, opt as any)
-  export const toNest_index = <T>(data?: T, opt?: any) => navigateTo(nest_index, data as any, opt as any)
-  export const toTest_index = <T>(data?: T, opt?: any) => navigateTo(test_index, data as any, opt as any)
-  export const toIndex_index = <T>(data?: T, opt?: any) => navigateTo(index_index, data as any, opt as any)
-  export const toFirstPage_FirstPage = <T>(data?: T, opt?: any) => navigateTo(firstPage_FirstPage, data as any, opt as any)
+}...]
+
+module.exports = {
+    pages_test_index,
+    ...
+    firstPage_FirstPage,
+
+    pages,
+    subPackages,
+}
+```
+routerService.ts引用taroPages.js
+```ts
+import { navigateTo } from "@common/utils"
+import taroPages from "./taroPages"
+
+export namespace RouterService {
+  /** package-test/pages/test/index */
+  export const toPages_test_index = <T>(data?: T, opt?: any) => navigateTo(taroPages.pages_test_index, data as any, opt as any)
+      ...
+  export const toIndex_index = <T>(data?: T, opt?: any) => navigateTo(taroPages.index_index, data as any, opt as any)
+  /** pages/firstPage/FirstPage */
+  export const toFirstPage_FirstPage = <T>(data?: T, opt?: any) => navigateTo(taroPages.firstPage_FirstPage, data as any, opt as any)
 }
 
 ```
 不再修改app.config.ts
 ```ts
 //app.config.ts
-import {RouterService} from "./service/routerService";
 import Taro from  '@tarojs/taro';
-
+const { pages, subPackages } = require('./service/taroPages')
 
 export default {
     //pages,subPackages采用依赖倒置,永远不变 
@@ -163,14 +171,14 @@ export const taroRouter: Config = {
     // firstPage: '/index/',
     // pagesDir: 'pages',
     // exts: ['.tsx', '.jsx', '.vue'],
-    // pageNameRegs: [/^index/i, /page/i],
-    // pageNameIgnoreRegs: [/_x$/i],
+    // pageRegExps: [/^index/i, /page/i],
+    // pageIgnoreRegExps: [/_x$/i],
     projectPath: basePath,
     subPageDirs:['package-test','pages/subPackage'],
     appConfigPath: basePath + '/src/app.config.ts',
     projectConfigPath: basePath + '/project.config.json',
 
-    outputFileName: 'service/routerService',
+    routerServiceFile: 'service/routerService',
     navigateFnName: 'navigateTo',
     navigateSpecifier: '@common/utils',
 }

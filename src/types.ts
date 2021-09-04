@@ -5,8 +5,14 @@ export interface GenerateRouterServiceOpt {
   navigateSpecifier: string
   /** 'navigateTo' */
   navigateFnName: string
-  /** 'service/routerService' */
-  outputFileName?: string
+  /** service*/
+  routerPath: string
+
+  /** 'routerService' */
+  routerServiceFile?: string
+
+  /** taroPages*/
+  pagesFile?: string
 
   formatter?(name: string): string
 }
@@ -21,16 +27,17 @@ export interface Config extends GenerateRouterServiceOpt {
   /** 'pages' */
   pagesDir?: string
 
-  /** [/^index/i, /page/i] */
-  pageNameRegs?: RegExp[]
+  /** 不带后缀名的短文件名，正则匹配，默认： [/^index/i, /page/i] ，[]表示只要满足exts即可*/
+  pageRegExps?: RegExp[]
 
-  /** [/_x$/i] 优先于pageNameRegs*/
-  pageNameIgnoreRegs?: RegExp[]
+  /** 不带后缀名的短文件名，排除正则匹配，默认： [/_x$/i,] ，优先于pageRegExps*/
+  /** [/_x$/i] 优先于pageRegExps*/
+  pageIgnoreRegExps?: RegExp[]
 
   /** ['package-test','pages/subPackage'], */
   subPageDirs: string[]
 
-  /** 'tsx','jsx' */
+  /** 'tsx','jsx','.vue' */
   exts?: string[]
 
   /** basePath + '/src/app.config.ts' */
@@ -46,8 +53,11 @@ export const defaultConfig: Partial<Config> = {
   firstPage: '/index/',
   pagesDir: 'pages',
   exts: ['.tsx', '.jsx', '.vue'],
-  pageNameRegs: [/^index/i, /page/i],
-  pageNameIgnoreRegs: [/_x$/i],
+  pageRegExps: [/^index/i, /page/i],
+  pageIgnoreRegExps: [/_x$/i],
+  routerPath: 'service',
+  routerServiceFile: 'routerService',
+  pagesFile: 'taroPages',
 }
 
 export type RquiredConfig = Required<Config>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import './FirstPage.css'
-import { routerService } from '../../service/routerService'
+import  {RouterService}  from '../../service/routerService'
 
 export default class FirstPage extends Component {
 
@@ -18,7 +18,7 @@ export default class FirstPage extends Component {
   render () {
     return (
       <View className='index'>
-        <View onClick={() => routerService.toTest({ id: 1 })}>点击跳转</View>
+        <View onClick={() => RouterService.toTest_index({ id: 1 })}>点击跳转</View>
       </View>
     )
   }

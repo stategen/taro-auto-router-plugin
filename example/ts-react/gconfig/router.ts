@@ -9,7 +9,7 @@ export const taroRouter: Config = {
   appConfigPath: basePath + '/src/app.config.ts',
   projectConfigPath: basePath + '/project.config.json',
 
-  outputFileName: 'service/routerService',
+  routerServiceFile: 'routerService',
   navigateFnName: 'navigateTo',
   navigateSpecifier: '@common/utils',
 }

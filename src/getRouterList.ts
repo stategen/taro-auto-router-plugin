@@ -12,15 +12,15 @@ export function getRouterList(config: RquiredConfig) {
     firstPage,
     subPageDirs,
     exts,
-    pageNameRegs,
-    pageNameIgnoreRegs,
+    pageRegExps,
+    pageIgnoreRegExps,
   } = config
   const srcPath = path.join(projectPath, srcDir)
 
   const srcPaths = getAllFiles(srcPath, exts)
-  //过滤只有page的页面 pageNameIgnoreRegs 优先
+  //过滤只有page的页面 pageIgnoreRegExps 优先
   const pagePaths = srcPaths.filter((srcPath) =>
-    filterPath(srcPath, pageNameRegs, pageNameIgnoreRegs)
+    filterPath(srcPath, pageRegExps, pageIgnoreRegExps)
   )
 
   const subPaths: Record<string, string[]> = {}

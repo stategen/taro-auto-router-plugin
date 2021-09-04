@@ -1,5 +1,4 @@
-import {RouterService} from "./service/routerService";
-import Taro from  '@tarojs/taro';
+const { pages, subPackages } = require('./service/taroPages')
 
 
 export default {
@@ -9,9 +8,11 @@ export default {
     navigationBarTitleText: 'WeChat',
     navigationBarTextStyle: 'black'
   },
-  pages: [...RouterService.pages],
+
+  pages: [...pages],
+
   subPackages: [
-    ...RouterService.subPackages
+    ...subPackages
   ],
 
 } as Taro.Config
