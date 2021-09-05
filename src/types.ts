@@ -17,6 +17,36 @@ export interface GenerateRouterServiceOpt {
   formatter?(name: string): string
 }
 
+export const defaultConfig: Partial<Config> = {
+  projectPath: process.cwd(),
+  srcDir: 'src',
+  firstPage: '/index/',
+  pagesDir: 'pages',
+  exts: ['.tsx', '.jsx', '.vue'],
+  pageRegExps: [/^index/i, /page/i],
+  pageIgnoreRegExps: [/_x$/i],
+  routerPath: 'service',
+  routerServiceFile: 'routerService',
+  pagesFile: 'taroPages',
+}
+
+/***
+ 默认值：
+ <pre>
+ {
+        projectPath: process.cwd(),
+        srcDir: 'src',
+        firstPage: '/index/',
+        pagesDir: 'pages',
+        exts: ['.tsx', '.jsx', '.vue'],
+        pageRegExps: [/^index/i, /page/i],
+        pageIgnoreRegExps: [/_x$/i],
+        routerPath: 'service',
+        routerServiceFile: 'routerService',
+        pagesFile: 'taroPages',
+    }
+ </pre>
+ */
 export interface Config extends GenerateRouterServiceOpt {
   /** process.cwd() */
   projectPath?: string
@@ -45,19 +75,6 @@ export interface Config extends GenerateRouterServiceOpt {
 
   /** basePath + '/project.config.json' */
   projectConfigPath: string
-}
-
-export const defaultConfig: Partial<Config> = {
-  projectPath: process.cwd(),
-  srcDir: 'src',
-  firstPage: '/index/',
-  pagesDir: 'pages',
-  exts: ['.tsx', '.jsx', '.vue'],
-  pageRegExps: [/^index/i, /page/i],
-  pageIgnoreRegExps: [/_x$/i],
-  routerPath: 'service',
-  routerServiceFile: 'routerService',
-  pagesFile: 'taroPages',
 }
 
 export type RquiredConfig = Required<Config>

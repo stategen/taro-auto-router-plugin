@@ -6,6 +6,7 @@ import { getRouterList } from './getRouterList'
 import { generateTaroPagesFile } from './generateTaroPagesFile'
 
 export default (options = {} as PluginOptions) => {
+  //generated会读取configDir配置目录下所有的文件，如果该文件夹下有不规范的文件，会直接倒置解析错识
   //获取配置
   const routerConfig: Config = options.config.taroRouter || {}
 

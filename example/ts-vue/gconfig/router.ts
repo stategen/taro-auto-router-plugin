@@ -1,4 +1,4 @@
-import { Config } from 'toro-auto-router-plugin'
+import { Config } from 'taro-auto-router-plugin'
 
 const basePath = process.cwd()
 

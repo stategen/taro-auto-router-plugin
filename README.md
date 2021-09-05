@@ -7,7 +7,7 @@
 1. 增加首页配置功能   
 1. 对subPackage增加文件夹过滤，而不是只限到到package-*中,当pages中的文件要分包，不需要移动，直接配置在subPageDirs中
 1. 因为生成代码不同，无法与原来的兼容，以所以重新起个名称，
-# toro-auto-router-plugin
+# taro-auto-router-plugin
 
 让你的 Taro 路由跳转拥有类似 umi 框架约定式路由的体验。
 
@@ -117,7 +117,7 @@ export default {
 ## 安装 (没有注册到npm,暂时只安装到本地私人仓库)
 
 ```bash
-npm i toro-auto-router-plugin -D
+npm i taro-auto-router-plugin -D
 ```
 
 ## 使用
@@ -146,7 +146,7 @@ import { GeneratedrcConfig } from 'generated'
 const generatedrc: GeneratedrcConfig = {
   configDir: './gconfig', // generated 插件配置目录
   plugins: [
-    'toro-auto-router-plugin', // 注册插件
+    'taro-auto-router-plugin', // 注册插件
   ],
 }
 
@@ -160,7 +160,7 @@ export default generatedrc
 2、写入配置
 
 ```ts
-import { Config } from 'toro-auto-router-plugin/src/types'
+import { Config } from 'taro-auto-router-plugin/src/types'
 
 const basePath = process.cwd()
 
