@@ -114,7 +114,7 @@ export default {
 
 ![效果图](./example.gif)
 
-## 安装 (没有注册到npm,暂时只安装到本地私人仓库)
+## 安装
 
 ```bash
 npm i taro-auto-router-plugin -D
