@@ -80,6 +80,7 @@ export function generateTaroPagesFile(
       //生成 export const pages_test_index = "package-test/pages/test/index"
       pages.push({
         declarationKind: VariableDeclarationKind.Const,
+        docs: [`${initializer}`],
         declarations: [
           {
             name: formatName,
