@@ -19,6 +19,7 @@ export function generateTaroPagesFile(
     pagesFile,
     routerPath,
     navigateFnName,
+    pagesDir = 'pages',
     formatter: customFormatter = formatter,
   } = generateRouterServiceOpt
 
@@ -61,7 +62,10 @@ export function generateTaroPagesFile(
       const { root = '', pages: pageList = [] } = routerMeta
       for (const subPage of pageList) {
         const subPagePath = toLinuxPath(join(root, subPage))
-        const name = toCamelCase(subPage)
+        let name = subPagePath.startsWith(pagesDir)
+          ? subPagePath.substr(pagesDir.length + 1)
+          : subPagePath
+        name = toCamelCase(name)
         routers.push({
           name,
           path: subPagePath,

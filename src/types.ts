@@ -1,6 +1,10 @@
 export interface GenerateRouterServiceOpt {
   /** src */
   srcDir?: string
+
+  /** 'pages' */
+  pagesDir?: string
+
   /** '@common/utils' */
   navigateSpecifier: string
   /** 'navigateTo' */
@@ -53,9 +57,6 @@ export interface Config extends GenerateRouterServiceOpt {
 
   /** pages/firstPage/FirstPage */
   firstPage?: string
-
-  /** 'pages' */
-  pagesDir?: string
 
   /** 不带后缀名的短文件名，正则匹配，默认： [/^index/i, /page/i] ，[]表示只要满足exts即可*/
   pageRegExps?: RegExp[]
