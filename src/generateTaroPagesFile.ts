@@ -101,7 +101,7 @@ export function generateTaroPagesFile(
         declarations: [
           {
             name: `to${upFirst(formatName)}`,
-            initializer: `<T>(data?: T, opt?: any) =>  ${navigateFnName}(taroPages.${formatName}, data as any, opt as any)`,
+            initializer: `<T>(data?: T, opt?: any) =>  ${navigateFnName}(${pagesFile}.${formatName}, data as any, opt as any)`,
           },
         ],
       })

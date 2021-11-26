@@ -64,8 +64,8 @@ export function getAllFiles(dir: string, exts: string[]) {
  * @param lastStr
  */
 export function subStr(src: string, fromIndex: number, lastStr: string) {
-  let dest = src.substr(fromIndex)
-  dest = dest.substr(0, dest.lastIndexOf(lastStr))
+  let dest = src.substring(fromIndex)
+  dest = dest.substring(0, dest.lastIndexOf(lastStr))
   return dest
 }
 
@@ -79,18 +79,29 @@ export function subStr(src: string, fromIndex: number, lastStr: string) {
 export function filterPath(
   srcPath: string,
   pageRegExps: RegExp[],
-  pageIgnoreRegExps: RegExp[]
+  pageIgnoreRegExps: RegExp[],
+  dirIgnoreRegExps: RegExp[]
 ): boolean {
   const isRegsEmpty = _.isEmpty(pageRegExps)
   const isIgnoreRegsEmpty = _.isEmpty(pageIgnoreRegExps)
-  if (isRegsEmpty && isIgnoreRegsEmpty) {
+  const isDirIgnoreRegExpsEmpty = _.isEmpty(dirIgnoreRegExps)
+  if (isRegsEmpty && isIgnoreRegsEmpty && isDirIgnoreRegExpsEmpty) {
     return true
   }
-
-  const pageName = _.last(srcPath.split('/')) || ''
+  let dirs_page_s = srcPath.split('/')
+  const pageName = _.last(dirs_page_s) || ''
 
   if (!isIgnoreRegsEmpty && pageIgnoreRegExps.some((reg) => reg.test(pageName))) {
     return false
+  }
+
+  if (!isDirIgnoreRegExpsEmpty) {
+    for (let i = 0; i <= dirs_page_s.length - 2; i++) {
+      const dir = dirs_page_s[i]
+      if (dirIgnoreRegExps.some((reg) => reg.test(dir))) {
+        return false
+      }
+    }
   }
 
   if (!isRegsEmpty && !pageRegExps.some((reg) => reg.test(pageName))) {

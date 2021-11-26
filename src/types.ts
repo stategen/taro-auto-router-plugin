@@ -5,6 +5,12 @@ export interface GenerateRouterServiceOpt {
   /** 'pages' */
   pagesDir?: string
 
+  /** false**/
+  useOnlyPages?: boolean
+
+  /** '' */
+  pagePrefix?: string
+
   /** '@common/utils' */
   navigateSpecifier: string
   /** 'navigateTo' */
@@ -26,12 +32,16 @@ export const defaultConfig: Partial<Config> = {
   srcDir: 'src',
   firstPage: '/index/',
   pagesDir: 'pages',
+  useOnlyPages: false,
+  pagePrefix: undefined,
   exts: ['.tsx', '.jsx', '.vue'],
   pageRegExps: [/^index/i, /page/i],
   pageIgnoreRegExps: [/_x$/i],
+  dirIgnoreRegExps: [/components/i],
+
   routerPath: 'service',
   routerServiceFile: 'routerService',
-  pagesFile: 'taroPages',
+  pagesFile: 'pages',
 }
 
 /***
@@ -42,12 +52,15 @@ export const defaultConfig: Partial<Config> = {
         srcDir: 'src',
         firstPage: '/index/',
         pagesDir: 'pages',
+        useOnlyPages: false,
+        pagePrefix: undefined,
         exts: ['.tsx', '.jsx', '.vue'],
         pageRegExps: [/^index/i, /page/i],
         pageIgnoreRegExps: [/_x$/i],
+        dirIgnoreRegExps: [/components/i],
         routerPath: 'service',
         routerServiceFile: 'routerService',
-        pagesFile: 'taroPages',
+        pagesFile: 'pages',
     }
  </pre>
  */
@@ -64,6 +77,9 @@ export interface Config extends GenerateRouterServiceOpt {
   /** 不带后缀名的短文件名，排除正则匹配，默认： [/_x$/i,] ，优先于pageRegExps*/
   /** [/_x$/i] 优先于pageRegExps*/
   pageIgnoreRegExps?: RegExp[]
+
+  /** 同pageIgnoreRegExps,过滤文件夹*/
+  dirIgnoreRegExps?: RegExp[]
 
   /** ['package-test','pages/subPackage'], */
   subPageDirs: string[]

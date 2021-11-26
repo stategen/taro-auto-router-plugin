@@ -36,7 +36,7 @@ export function generateRouterService(
   })
 
   sourceFile.addImportDeclaration({
-    defaultImport: 'taroPages',
+    defaultImport: pagesFile,
     moduleSpecifier: `./${pagesFile}`,
   })
 
