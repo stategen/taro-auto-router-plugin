@@ -49,7 +49,7 @@ export function generateTaroPagesFile(
 
   const mainPageRouters: RouterMeta[] = []
   const subPageRouters: RouterMeta[] = []
-  let allPages = ''
+  // let allPages = ''
 
   for (const routerMeta of routerList) {
     const routers: RouterMeta[] = []
@@ -89,8 +89,8 @@ export function generateTaroPagesFile(
         ],
       })
 
-      allPages += `${customFormatter(name)},
-                `
+      // allPages += `${customFormatter(name)},
+      //           `
 
       //生成 export const toPages_test_index = <T>(data?: T, opt?: any) =>
       // navigateTo(pages_test_index, data as any, opt as any)
@@ -123,9 +123,9 @@ export function generateTaroPagesFile(
     declarations: [
       {
         name: 'pages',
-        initializer: `[
+        initializer: `{
                   ${mainPages}
-                ]`,
+                }`,
       },
     ],
   }
@@ -164,7 +164,6 @@ export function generateTaroPagesFile(
 
   sourceFile.addStatements(
     `module.exports= {
-      ${allPages}
       pages,
       subPackages,
    }`

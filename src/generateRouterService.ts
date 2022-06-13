@@ -36,7 +36,8 @@ export function generateRouterService(
   })
 
   sourceFile.addImportDeclaration({
-    defaultImport: pagesFile,
+    namedImports: ['pages'],
+    // defaultImport: pagesFile,
     moduleSpecifier: `./${pagesFile}`,
   })
 
